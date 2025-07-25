@@ -1,0 +1,18 @@
+name: book_ai
+channels:
+  - defaults
+  - anaconda
+  - bioconda
+  - conda-forge
+dependencies:
+  - python==3.9
+  - pip
+  #- libstdcxx-ng~=12.4.0 # Needed to load espeak correctly. Try removing this if you're facing issues with Espeak fallback.
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu118
+      - torch==2.7.0
+      - kokoro>=0.3.1
+      - soundfile
+      - misaki[en]
+      - ebooklib==0.19
+      - pyinstaller

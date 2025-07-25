@@ -1,0 +1,38 @@
+CONTROLLER (DIGESTRAR):
+
+In its own thread to not bog us down:
+	Creates the processBuilder using the command
+
+	redirects error output to normal output stream so we can deal with it
+
+	start the process builder so we can access the Process
+
+	Create a PrintWriter and make the process output to it
+
+	Create an outputReaderWorker and execute it
+
+	Wait for the process to finish, get the exit3 code from it
+
+\\\\\
+
+OutputReaderWorker:
+	Has a BufferedReader dealing with the input stream, the input stream is passed in
+	In the background (the process this worker does):
+		Every time we get a line from the reader, we publish it. Calling publish() calls 			process() on the main thread, so we do our updating there
+	Process():
+		We put our line in the output area and set the caret position to the end
+	done():
+		This gets called on the EDT after we finish doInBackground, so either our process 			finishes or we cancel, it calls get() to get the result of doInBackground()
+
+
+
+\\\\\\
+
+
+MODEL (BOOKMODEL):
+Book Name
+List of chapters
+Currently generating chapter (-1 = not started, -2 = finished generating)
+
+Directory of working folder
+
