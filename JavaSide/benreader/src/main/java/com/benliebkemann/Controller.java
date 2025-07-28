@@ -1,7 +1,9 @@
 package com.benliebkemann;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FileDialog;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -18,8 +21,11 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -29,6 +35,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class Controller implements ActionListener, WindowListener {
 
@@ -40,6 +53,88 @@ public class Controller implements ActionListener, WindowListener {
 	public Controller(Main main) {
 		this.main = main;
 		digestrars = new ArrayList<Digestrar>();
+	}
+
+	private static BufferedImage matrixToImage(BitMatrix bitMatrix) {
+		BufferedImage out = new BufferedImage(bitMatrix.getWidth(), bitMatrix.getHeight(),
+				BufferedImage.TYPE_BYTE_BINARY);
+		for (int y = 0; y < bitMatrix.getHeight(); y++) {
+			for (int x = 0; x < bitMatrix.getWidth(); x++) {
+				out.setRGB(x, y, bitMatrix.get(x, y) ? Color.black.getRGB() : Color.white.getRGB());
+			}
+		}
+		return out;
+	}
+
+	public void showSelectedBookQrCode() {
+		if (main.getSelectedBook() == null) {
+			showError("No book selected");
+			return;
+		}
+		showQrCode(main.getSelectedBook());
+	}
+
+	public void showQrCode(BookModel book) {
+		class QrCodePanel extends JPanel {
+			private BufferedImage qrcode;
+
+			public QrCodePanel(BufferedImage image) {
+				this.qrcode = image;
+			}
+
+			@Override
+			public void paint(Graphics g) {
+				super.paint(g);
+				float scaling = 1f * getWidth() / qrcode.getWidth();
+				if (qrcode.getHeight() * scaling > getHeight()) {
+					scaling = 1f * getHeight() / qrcode.getHeight();
+				}
+				g.drawImage(qrcode, (int) (getWidth() / 2 - qrcode.getWidth() * scaling / 2),
+						(int) (getHeight() / 2 - qrcode.getHeight() * scaling / 2), (int) (qrcode.getWidth() * scaling),
+						(int) (qrcode.getHeight() * scaling), null);
+			}
+		}
+
+		List<File> files = Arrays.asList(book.getOutputDirectory().listFiles());
+		String link = "";
+		for (File file : files) {
+			if (file.getAbsolutePath().endsWith(".benr")) {
+				link = main.getDownloadServer().getLink() + "/" + book.getBookDirectory().getName() + "/output/"
+						+ file.getName();
+				System.out.println(link);
+				break;
+			}
+		}
+		if (link.equals("")) {
+			showError("No file to export. Please run TTS on this book.");
+			return;
+		}
+
+		int width = 300;
+		int height = 300;
+		Map<EncodeHintType, Object> hints = new HashMap<>();
+		hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+		QRCodeWriter qrCodeWriter = new QRCodeWriter();
+		try {
+			BitMatrix bitMatrix = qrCodeWriter.encode(
+					link,
+					BarcodeFormat.QR_CODE, width, height);
+			BufferedImage qrImage = matrixToImage(bitMatrix);
+			QrCodePanel panel = new QrCodePanel(qrImage);
+			JFrame panelFrame = new JFrame("QR Code");
+			panelFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			panelFrame.add(panel);
+			panelFrame.pack();
+			panelFrame.setMinimumSize(new Dimension(100, 100));
+			panelFrame.setSize(300, 300);
+			panelFrame.setLocationRelativeTo(main);
+			panelFrame.setVisible(true);
+
+		} catch (WriterException e) {
+			showError("Couldn't create QR Code");
+		}
+
 	}
 
 	public void generateAudio() {

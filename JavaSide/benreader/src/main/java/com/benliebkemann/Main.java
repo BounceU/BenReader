@@ -2,6 +2,7 @@ package com.benliebkemann;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.Taskbar;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -38,10 +39,16 @@ public class Main extends JFrame implements WindowListener, ListSelectionListene
     private BookTableModel tableModel;
     private JTable table;
 
+    private DownloadServer downloadServer;
+
     public static void main(String[] args) {
 
         FlatIntelliJLaf.setup();
         new Main().run();
+    }
+
+    public DownloadServer getDownloadServer() {
+        return downloadServer;
     }
 
     public BookModel getSelectedBook() {
@@ -51,20 +58,22 @@ public class Main extends JFrame implements WindowListener, ListSelectionListene
     public Main() {
         super("BenReader");
         Image appIcon = new ImageIcon("icons/app_icon.png").getImage();
-        // final Taskbar taskbar = Taskbar.getTaskbar();
+        final Taskbar taskbar = Taskbar.getTaskbar();
 
-        // try {
-        // taskbar.setIconImage(appIcon);
-        // } catch (final UnsupportedOperationException e) {
-        // System.out.println("The os does not support taskbar.setIconImage. " +
-        // e.getMessage());
-        // } catch (final SecurityException e) {
-        // System.out.println("There was a security exception for taskbar.setIconImage.
-        // " + e.getMessage());
-        // }
+        try {
+            taskbar.setIconImage(appIcon);
+        } catch (final UnsupportedOperationException e) {
+            System.out.println("The os does not support taskbar.setIconImage. " +
+                    e.getMessage());
+        } catch (final SecurityException e) {
+            System.out.println("There was a security exception for taskbar.setIconImage. " + e.getMessage());
+        }
         setIconImage(appIcon);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(this);
+        this.downloadServer = new DownloadServer();
+        Thread t = new Thread(this.downloadServer);
+        t.start();
         books = new ArrayList<BookModel>();
         tableModel = new BookTableModel();
         table = new JTable(tableModel);

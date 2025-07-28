@@ -3,11 +3,17 @@
 !JavaSide/
 !JavaSide/**
 JavaSide/benreader/target/
+JavaSide/benreader/res/**
+!JavaSide/benreader/res/
+JavaSide/benreader/tts/**
+!JavaSide/benreader/tts/
+
 
 !CompileBenReader.bat
 
 !LICENSE
 
+!PythonSide/
 !PythonSide/**
 
 !.gitignore

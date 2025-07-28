@@ -21,6 +21,7 @@ public class ButtonPanel extends JPanel {
 	JButton pauseGeneration;
 	JButton settings;
 	JButton clean;
+	JButton export;
 	Controller controller;
 
 	// CONTROLLER - ADD AND REMOVE BOOKS
@@ -107,6 +108,19 @@ public class ButtonPanel extends JPanel {
 			}
 		});
 		add(settings, BorderLayout.LINE_START);
+
+		export = new JButton("Export", resizeIcon(new ImageIcon("icons/export_book.png")));
+		export.setVerticalTextPosition(SwingConstants.BOTTOM);
+		export.setHorizontalTextPosition(SwingConstants.CENTER);
+		export.setMargin(new Insets(5, 5, 5, 5));
+		export.setPreferredSize(new Dimension(100, 100));
+		export.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showSelectedBookQrCode();
+			}
+		});
+		add(export, BorderLayout.LINE_START);
 
 	}
 
