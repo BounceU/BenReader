@@ -1,0 +1,12 @@
+*
+
+!JavaSide/benreader/
+JavaSide/benreader/target/
+
+!CompileBenReader.bat
+
+!LICENSE
+
+!PythonSide/
+
+!.gitignore
