@@ -1,6 +1,7 @@
 *
 
-!JavaSide/benreader/**
+!JavaSide/
+!JavaSide/**
 JavaSide/benreader/target/
 
 !CompileBenReader.bat
