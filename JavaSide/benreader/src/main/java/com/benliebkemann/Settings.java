@@ -42,7 +42,7 @@ public class Settings {
 	public void updateSettings() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.writeValue(new File("config.json"), this);
+			mapper.writeValue(new File(Main.filePrefix + "/config.json"), this);
 		} catch (IOException ioe) {
 			Controller.showError("Couldn't update settings: " + ioe.getMessage());
 		}

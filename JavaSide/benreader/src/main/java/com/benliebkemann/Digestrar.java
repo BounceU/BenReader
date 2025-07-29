@@ -24,7 +24,7 @@ import javax.swing.SwingWorker;
 
 public class Digestrar {
 
-	public static String PROGRAM_LOCATION = "tts" + File.separator + "tts_epub"
+	public static String PROGRAM_LOCATION = Main.filePrefix + "/tts" + File.separator + "tts_epub"
 			+ (System.getProperty("os.name").startsWith("Windows") ? ".exe" : "");// "D:\\Programming\\VSCode
 	// Python\\dist\\tts_epub.exe";
 

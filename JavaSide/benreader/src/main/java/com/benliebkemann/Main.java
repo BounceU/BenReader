@@ -8,6 +8,8 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class Main extends JFrame implements WindowListener, ListSelectionListene
 
     private DownloadServer downloadServer;
 
+    public static String filePrefix = "";
+
     public static void main(String[] args) {
 
         FlatIntelliJLaf.setup();
@@ -57,7 +61,28 @@ public class Main extends JFrame implements WindowListener, ListSelectionListene
 
     public Main() {
         super("BenReader");
-        Image appIcon = new ImageIcon("icons/app_icon.png").getImage();
+
+        try {
+            // Get the URL of the CodeSource for the current class
+            java.net.URL url = Main.class.getProtectionDomain().getCodeSource().getLocation();
+
+            // Decode the URL to handle spaces or special characters in the path
+            String path;
+            path = URLDecoder.decode(url.getFile(), "UTF-8");
+
+            // Create a File object from the decoded path
+            File jarFile = new File(path);
+
+            // Get the parent directory of the JAR file
+            String jarDirectory = jarFile.getParent();
+            filePrefix = jarDirectory;
+
+            System.out.println("JAR was run from: " + jarDirectory);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Image appIcon = new ImageIcon(filePrefix + "/icons/app_icon.png").getImage();
         final Taskbar taskbar = Taskbar.getTaskbar();
 
         try {
@@ -159,12 +184,12 @@ public class Main extends JFrame implements WindowListener, ListSelectionListene
 
     public void loadSettings() {
 
-        if (!(new File("config.json")).exists()) {
+        if (!(new File(filePrefix + "/config.json")).exists()) {
             setupSettings();
         } else {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                SETTINGS = mapper.readValue(new File("config.json"), Settings.class);
+                SETTINGS = mapper.readValue(new File(filePrefix + "/config.json"), Settings.class);
             } catch (IOException ioe) {
                 Controller.showError("Couldn't initialize settings: " + ioe.getMessage());
                 setupSettings();
@@ -175,7 +200,7 @@ public class Main extends JFrame implements WindowListener, ListSelectionListene
     public void setupSettings() {
         String initialSettings = "{\"voice\":\"bm_george,bm_george,bm_george,bm_george,bm_george,bm_lewis,bm_lewis,bm_lewis\",\"clearOutput\":false,\"useM4a\":true}";
         try {
-            FileWriter writer = new FileWriter("config.json");
+            FileWriter writer = new FileWriter(filePrefix + "/config.json");
             writer.write(initialSettings);
             writer.close();
             ObjectMapper mapper = new ObjectMapper();

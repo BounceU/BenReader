@@ -1,11 +1,8 @@
 package com.benliebkemann;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -34,8 +31,9 @@ public class DownloadServer implements Runnable {
 			Controller.showError("Couldn't get server link, make sure you are connected to the internet");
 		}
 		InetSocketAddress address = new InetSocketAddress(8080);
-		Path path = Paths.get("res").toAbsolutePath();
+		Path path = Paths.get(Main.filePrefix, "res").toAbsolutePath();
 		System.out.println(path);
+		System.out.println("Should have made it with " + Main.filePrefix);
 		HttpServer server = SimpleFileServer.createFileServer(address, path, SimpleFileServer.OutputLevel.VERBOSE);
 		server.start();
 		serverLink += ":" + address.getPort();

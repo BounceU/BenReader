@@ -19,7 +19,6 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.JOptionPane;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -109,7 +108,7 @@ public class BookModel implements Comparable<BookModel>, PropertyChangeListener 
 	 */
 	public BookModel(File epubOnDisk) {
 		numChapters = 0;
-		File resDirectory = new File("res" + File.separator);
+		File resDirectory = new File(Main.filePrefix + "/res" + File.separator);
 		String[] directories = resDirectory.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File current, String name) {
@@ -122,11 +121,11 @@ public class BookModel implements Comparable<BookModel>, PropertyChangeListener 
 			randomAlphanumeric = generateRandomString(DIRECTORY_NAME_LENGTH);
 		}
 
-		bookDirectory = new File("res" + File.separator + randomAlphanumeric + File.separator);
-		workingDirectory = new File(
-				"res" + File.separator + randomAlphanumeric + File.separator + "working" + File.separator);
-		outputDirectory = new File(
-				"res" + File.separator + randomAlphanumeric + File.separator + "output" + File.separator);
+		bookDirectory = new File(Main.filePrefix + "/res" + File.separator + randomAlphanumeric + File.separator);
+		workingDirectory = new File(Main.filePrefix +
+				"/res" + File.separator + randomAlphanumeric + File.separator + "working" + File.separator);
+		outputDirectory = new File(Main.filePrefix +
+				"/res" + File.separator + randomAlphanumeric + File.separator + "output" + File.separator);
 		workingDirectory.mkdirs();
 		outputDirectory.mkdirs();
 
@@ -181,8 +180,10 @@ public class BookModel implements Comparable<BookModel>, PropertyChangeListener 
 	 */
 	public BookModel(String folderName) {
 
-		if (new File("res" + File.separator + folderName + File.separator + "book_info.json").exists()) {
-			loadBook(new File("res" + File.separator + folderName + File.separator + "book_info.json"));
+		if (new File(Main.filePrefix + "/res" + File.separator + folderName + File.separator + "book_info.json")
+				.exists()) {
+			loadBook(new File(
+					Main.filePrefix + "/res" + File.separator + folderName + File.separator + "book_info.json"));
 			this.pcs.addPropertyChangeListener(this);
 			EpubReader epubReader = new EpubReader();
 			try {
@@ -202,11 +203,11 @@ public class BookModel implements Comparable<BookModel>, PropertyChangeListener 
 		} else {
 
 			numChapters = 0;
-			bookDirectory = new File("res" + File.separator + folderName + File.separator);
-			workingDirectory = new File(
-					"res" + File.separator + folderName + File.separator + "working" + File.separator);
-			outputDirectory = new File(
-					"res" + File.separator + folderName + File.separator + "output" + File.separator);
+			bookDirectory = new File(Main.filePrefix + "/res" + File.separator + folderName + File.separator);
+			workingDirectory = new File(Main.filePrefix +
+					"/res" + File.separator + folderName + File.separator + "working" + File.separator);
+			outputDirectory = new File(Main.filePrefix +
+					"/res" + File.separator + folderName + File.separator + "output" + File.separator);
 			workingDirectory.mkdirs();
 			outputDirectory.mkdirs();
 
@@ -296,7 +297,7 @@ public class BookModel implements Comparable<BookModel>, PropertyChangeListener 
 
 	public static List<BookModel> getExisting() {
 		List<BookModel> bookModels = new ArrayList<BookModel>();
-		File resDirectory = new File("res" + File.separator);
+		File resDirectory = new File(Main.filePrefix + "/res" + File.separator);
 		String[] directories = resDirectory.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File current, String name) {

@@ -31,7 +31,7 @@ public class ButtonPanel extends JPanel {
 
 		this.controller = controller;
 
-		addBook = new JButton("Add Book", resizeIcon(new ImageIcon("icons/add_book.png")));
+		addBook = new JButton("Add Book", resizeIcon(new ImageIcon(Main.filePrefix + "/icons/add_book.png")));
 		addBook.setVerticalTextPosition(SwingConstants.BOTTOM);
 		addBook.setHorizontalTextPosition(SwingConstants.CENTER);
 		addBook.setMargin(new Insets(5, 5, 5, 5));
@@ -44,7 +44,7 @@ public class ButtonPanel extends JPanel {
 		});
 		add(addBook, BorderLayout.LINE_START);
 
-		removeBook = new JButton("Remove Book", resizeIcon(new ImageIcon("icons/remove_book.png")));
+		removeBook = new JButton("Remove Book", resizeIcon(new ImageIcon(Main.filePrefix + "/icons/remove_book.png")));
 		removeBook.setVerticalTextPosition(SwingConstants.BOTTOM);
 		removeBook.setHorizontalTextPosition(SwingConstants.CENTER);
 		removeBook.setMargin(new Insets(5, 5, 5, 5));
@@ -57,7 +57,8 @@ public class ButtonPanel extends JPanel {
 		});
 		add(removeBook, BorderLayout.LINE_START);
 
-		generateAudio = new JButton("Run TTS", resizeIcon(new ImageIcon("icons/generate_audio.png")));
+		generateAudio = new JButton("Run TTS",
+				resizeIcon(new ImageIcon(Main.filePrefix + "/icons/generate_audio.png")));
 		generateAudio.setVerticalTextPosition(SwingConstants.BOTTOM);
 		generateAudio.setHorizontalTextPosition(SwingConstants.CENTER);
 		generateAudio.setMargin(new Insets(5, 5, 5, 5));
@@ -70,7 +71,8 @@ public class ButtonPanel extends JPanel {
 		});
 		add(generateAudio, BorderLayout.LINE_START);
 
-		generateAudio = new JButton("Pause TTS", resizeIcon(new ImageIcon("icons/pause_generation.png")));
+		generateAudio = new JButton("Pause TTS",
+				resizeIcon(new ImageIcon(Main.filePrefix + "/icons/pause_generation.png")));
 		generateAudio.setVerticalTextPosition(SwingConstants.BOTTOM);
 		generateAudio.setHorizontalTextPosition(SwingConstants.CENTER);
 		generateAudio.setMargin(new Insets(5, 5, 5, 5));
@@ -83,7 +85,7 @@ public class ButtonPanel extends JPanel {
 		});
 		add(generateAudio, BorderLayout.LINE_START);
 
-		clean = new JButton("Clean", resizeIcon(new ImageIcon("icons/clean.png")));
+		clean = new JButton("Clean", resizeIcon(new ImageIcon(Main.filePrefix + "/icons/clean.png")));
 		clean.setVerticalTextPosition(SwingConstants.BOTTOM);
 		clean.setHorizontalTextPosition(SwingConstants.CENTER);
 		clean.setMargin(new Insets(5, 5, 5, 5));
@@ -96,7 +98,7 @@ public class ButtonPanel extends JPanel {
 		});
 		add(clean, BorderLayout.LINE_START);
 
-		settings = new JButton("Settings", resizeIcon(new ImageIcon("icons/settings.png")));
+		settings = new JButton("Settings", resizeIcon(new ImageIcon(Main.filePrefix + "/icons/settings.png")));
 		settings.setVerticalTextPosition(SwingConstants.BOTTOM);
 		settings.setHorizontalTextPosition(SwingConstants.CENTER);
 		settings.setMargin(new Insets(5, 5, 5, 5));
@@ -109,7 +111,7 @@ public class ButtonPanel extends JPanel {
 		});
 		add(settings, BorderLayout.LINE_START);
 
-		export = new JButton("Export", resizeIcon(new ImageIcon("icons/export_book.png")));
+		export = new JButton("Export", resizeIcon(new ImageIcon(Main.filePrefix + "/icons/export_book.png")));
 		export.setVerticalTextPosition(SwingConstants.BOTTOM);
 		export.setHorizontalTextPosition(SwingConstants.CENTER);
 		export.setMargin(new Insets(5, 5, 5, 5));

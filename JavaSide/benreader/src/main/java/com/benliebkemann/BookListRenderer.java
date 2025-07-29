@@ -35,7 +35,7 @@ public class BookListRenderer extends JPanel implements ListCellRenderer<BookMod
 		super(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		setImage(new ImageIcon("icons" + File.separator + "default_cover.png"));
+		setImage(new ImageIcon(Main.filePrefix + "/icons" + File.separator + "default_cover.png"));
 
 		// Book Cover
 		c.fill = GridBagConstraints.HORIZONTAL;
