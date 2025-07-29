@@ -132,9 +132,6 @@ for index, item in book_enumeration:
 	if item.get_type() == ebooklib.ITEM_DOCUMENT:
 		if(item.get_name() == "nav.xhtml"):
 			continue
-		# Skip table of contents
-		# if(index == 1):
-		# 	continue
 		# Get html parser
 		f = MyHTMLParser()
 		# Get body content (text) of item 
@@ -154,7 +151,6 @@ for index, item in book_enumeration:
 		# Allow for more data in the parser
 		f.texts.append([])
 		# I had to do it this way because the parser seemed to be read only
-
 
 
 def listChapters(texts, labels):
@@ -249,15 +245,11 @@ new_book.spine = new_spine
 epub.write_epub(f'{workingDirectory}{os.path.sep}{useBookName}.epub', new_book)
 
 
-
-
-
 # Load pipeline, might generate some warnings but should be okay
 if(args.voice.startswith('b')):
 	pipeline = KPipeline(lang_code='b')
 else:
 	pipeline = KPipeline(lang_code='a')
-
 
 
 # Set up variables to track timestamps and audio length
@@ -272,7 +264,7 @@ if(args.machine):
 
 text_enumeration = enumerate(texts) if args.machine else tqdm(enumerate(texts), total=len(texts), desc="Generating chapters")
 
-for index, text in text_enumeration: # enumerate(texts): #
+for index, text in text_enumeration:
 	
 	if(index < skipTo):
 		fileNames = fileNames + f'file \'{index}.wav\'\n'
@@ -304,11 +296,7 @@ for index, text in text_enumeration: # enumerate(texts): #
 	
 	# Select voice pack
 	voice_pack = args.voice
-	# if args.voice == "ben":
-	# 	voice_pack = 'bm_george,bm_george,bm_george,bm_george,bm_george,bm_lewis,bm_lewis,bm_lewis'
-	# if args.voice == "dad":
-	# 	voice_pack = 'am_adam,am_adam,am_adam,am_adam,am_adam,am_adam,am_adam,am_adam,am_adam,am_adam,am_adam,bm_george,bm_george,bm_george,bm_george,bm_lewis,bm_lewis,bm_lewis,bm_lewis,bm_lewis,bm_lewis'
-	
+
 	# Create new text, removing all single-elements
 	newText = [item for item in text if item.strip() != "." and item.strip() != "?" and item.strip() != "!" and item.strip() != "," and re.search(r'(?![a-zA-Z0-9?.]+)', item)]
 	useText = "\n".join(newText)
@@ -439,18 +427,3 @@ print("done", flush=True)
 
 # Print length of final output audio file
 print("Total Length: " + str(timedelta(seconds=totalLength)))
-
-
-
-## BOTH:
-#  ffmpeg -f concat -i mylist.txt -acodec alac "%arg1%.m4a"
-
-## MAC/LINUX:
-# rm chapterList.txt
-# rm *.wav
-
-## WINDOWS:
-# del chapterList.txt
-# del *.wav
-
-

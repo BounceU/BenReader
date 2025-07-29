@@ -17,7 +17,7 @@ if not exist "./BenReaderCompiled/tts/tts_epub.exe" (
 echo "Compiling python program"
 cd "./PythonSide/"
 call conda activate book_ai > NUL
-call pyinstaller --onedir tts_epub.py --add-data "C:/Users/ben/miniconda3/envs/book_ai/Lib/site-packages;." --noconfirm 2> NUL
+call pyinstaller --onefile tts_epub.py --add-data "C:/Users/ben/miniconda3/envs/book_ai/Lib/site-packages;." --noconfirm 2> NUL
 call conda activate base > NUL
 echo "Done."
 cd "../"

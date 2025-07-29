@@ -17,3 +17,5 @@ JavaSide/benreader/tts/**
 !PythonSide/**
 
 !.gitignore
+
+!*.md
