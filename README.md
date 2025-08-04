@@ -53,6 +53,17 @@ BenReader is a Java app and Python CLI that uses the [Kokoro-82m](https://huggin
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- CONTACT -->
+## Contact
+
+Ben Liebkemann - ben@liebkemann.com
+
+Project Link: [https://github.com/BounceU/BenReader](https://github.com/BounceU/BenReader)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -126,15 +137,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- CONTACT -->
-## Contact
-
-Ben Liebkemann - ben@liebkemann.com
-
-Project Link: [https://github.com/BounceU/BenReader](https://github.com/BounceU/BenReader)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
