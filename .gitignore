@@ -8,7 +8,8 @@ JavaSide/benreader/res/**
 JavaSide/benreader/tts/**
 !JavaSide/benreader/tts/
 
-
+!GettingStarted.benr
+!GettingStarted.epub
 !CompileBenReader.bat
 
 !LICENSE
