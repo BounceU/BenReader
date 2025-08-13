@@ -67,15 +67,20 @@ Project Link: [https://github.com/BounceU/BenReader](https://github.com/BounceU/
 <!-- GETTING STARTED -->
 ## Getting Started
 
+### Downloads 
 
-### Prerequisites
+https://github.com/BounceU/BenReader/releases
+
+### Building the project locally
+
+
+#### Prerequisites
 
 * Java JDK 18+: [Oracle](https://www.oracle.com/java/technologies/downloads/), [Microsoft](https://learn.microsoft.com/en-us/java/openjdk/download)
 * [Maven](https://maven.apache.org/download.cgi)
 * [FFMPEG](https://ffmpeg.org/download.html)
 * [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)
 
-### Building the project locally
 
 1. Clone the repo
    ```sh
@@ -102,6 +107,7 @@ Project Link: [https://github.com/BounceU/BenReader](https://github.com/BounceU/
 	├─ icons/
 	│  ├─ add_book.png
 	│  ├─ app_icon.ico
+	│  ├─ app_icon.icns
 	│  ├─ app_icon.png
 	│  ├─ clean.png
 	│  ├─ default_cover.png
@@ -111,10 +117,11 @@ Project Link: [https://github.com/BounceU/BenReader](https://github.com/BounceU/
 	│  ├─ settings.png
 	├─ res/
 	├─ tts/
-	│  ├─ _internal/
+	│  ├─ bin/
+    │  │  ├─ ffmpeg.exe    
 	│  ├─ tts_epub (executable)
    ```
-   The jar is the one you compiled in step 2, and the contents of the `tts` folder are the contents of the `dist/tts_epub/` folder you compiled in step 4. With this, the program is done and you just need to run the jar. Internal program files will appear when you start using the program, like a `config.json` file.
+   The jar is the one you compiled in step 2, and the contents of the `tts` folder are the contents of the `dist/tts_epub/` folder you compiled in step 4. With this, the program is done and you just need to run the jar. Internal program files will appear when you start using the program, like a `config.json` file. You will need to download the [FFMPEG](https://ffmpeg.org/download.html) distributible for your operating system and insert it into the tts/bin folder as shown above.
 6. (Optional) Build as application with jpackage
    
    In the `BenReader` directory you created, run the following to create an installer
@@ -124,11 +131,17 @@ Project Link: [https://github.com/BounceU/BenReader](https://github.com/BounceU/
 		```
 	- MacOOS:
 		```sh
-		jpackage --input "." --name "BenReader" --main-jar "benreader.jar" --mac-sign --type dmg
+		jpackage -t "dmg" --app-version 1.0 --icon icons/app_icon.icns --name BenReader --verbose --input . --main-jar benreader.jar --mac-sign
 		```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Roadmap
+- [ ] Filter out invisible tags like \<span> outside of \<p> blocks
+- [ ] Incorporate other TTS models
+- [ ] Compile a version of the iOS app that has the Kokoro model built-in
+- [ ] Add support for importing other filetypes (would convert them to epub in the background)
+  - [ ] pdf
 
 <!-- LICENSE -->
 ## License

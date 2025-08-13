@@ -24,8 +24,10 @@ import javax.swing.SwingWorker;
 
 public class Digestrar {
 
-	public static String PROGRAM_LOCATION = Main.filePrefix + "/tts" + File.separator + "tts_epub"
+	public static String PROGRAM_LOCATION = Main.filePrefix + File.separator + "tts" + File.separator + "tts_epub"
 			+ (System.getProperty("os.name").startsWith("Windows") ? ".exe" : "");// "D:\\Programming\\VSCode
+	public static String FFMPEG_LOCATION = Main.filePrefix + File.separator + "tts" + File.separator + "bin"
+			+ File.separator + "ffmpeg" + (System.getProperty("os.name").startsWith("Windows") ? ".exe" : "");
 	// Python\\dist\\tts_epub.exe";
 
 	private Process currentProcess;
@@ -108,7 +110,7 @@ public class Digestrar {
 						// Python/testing.py"
 						PROGRAM_LOCATION, "-v", Main.SETTINGS.getVoice(), "-i", book.getBookFile().getAbsolutePath(),
 						"-d",
-						book.getWorkingDirectory().getAbsolutePath(), "-m"
+						book.getWorkingDirectory().getAbsolutePath(), "-m", "-f", FFMPEG_LOCATION
 
 				};
 				ProcessBuilder processBuilder = new ProcessBuilder(command);

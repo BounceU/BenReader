@@ -5,18 +5,14 @@ from html.parser import HTMLParser
 import ebooklib
 from ebooklib import epub
 import subprocess
-import sys
 import os
 from datetime import timedelta
 import torch
 import re
-import shutil
 import copy
 import argparse
 import platform
-from kokoro import KPipeline
 import json
-
 
 parser = argparse.ArgumentParser(description="A script to generate an AI audiobook from an epub file")
 parser.add_argument("-v", "--voice", type=str, required=True, help = "The voice(s) to use. Separate by commas to combine multiple voices into one. ex: bm_george,bm_george,bm_george,bm_george,bm_george,bm_lewis,bm_lewis,bm_lewis")
@@ -24,6 +20,7 @@ parser.add_argument("-i", "--input", type=str, required=True, help = "Required. 
 parser.add_argument("-d", "--directory", type=str, required=True, help = "Required. The directory to use as a working directory.")
 parser.add_argument("-a", "--audio", type=str, default="m4a", help = "The type of audio file to use. m4a is more accurate but larger. mp3 is smaller but less accurate")
 parser.add_argument("-m", "--machine", action="store_true", help="Flag denoting that this is being used as a backend for a GUI, changes behavior, do not use if running through the command line")
+parser.add_argument("-f", "--ffmpeg_location", type=str, required=True, help = "Required. The path to your FFMPEG executable file.")
 
 args = parser.parse_args()
 
@@ -96,22 +93,25 @@ class MyHTMLParser(HTMLParser):
 		if(data.strip() == ""):
 			return
 		
+		useData = data.replace('\r', '')
+		useData = useData.replace('\n', '')
+		
 		# We're doing the same thing no matter what
 		if(len(self.prevData) == 1):
-			newData = self.getSplitString(data, ".")
+			newData = self.getSplitString(useData, ".")
 			newData2 = []
 			for dat in newData:
 				newData2.extend(self.getSplitString(dat, "?"))
 			self.texts[-1].extend(newData2)
-			self.content = self.content +  data
+			self.content = self.content +  useData
 		else:
-			newData = self.getSplitString(data, ".")
+			newData = self.getSplitString(useData, ".")
 			newData2 = []
 			for dat in newData:
 				newData2.extend(self.getSplitString(dat, "?"))
 			self.texts[-1].extend(newData2)
-			self.content = self.content + "\n" + data
-		self.prevData = data
+			self.content = self.content + "\n" + useData
+		self.prevData = useData
 
 # Set up structure to read the text content of the book. Each chapter is a list of strings corresponding to different text in tags
 # and `texts` is a list of chapters
@@ -244,6 +244,7 @@ for items in book.spine:
 new_book.spine = new_spine
 epub.write_epub(f'{workingDirectory}{os.path.sep}{useBookName}.epub', new_book)
 
+from kokoro import KPipeline
 
 # Load pipeline, might generate some warnings but should be okay
 if(args.voice.startswith('b')):
@@ -371,11 +372,24 @@ with open(f'{workingDirectory}{os.path.sep}chapterList.txt', "w") as file:
 	file.write(fileNames)
 	file.close()
 
-if(args.audio == "mp3"):
-	subprocess.run(["ffmpeg", "-f", "concat", "-i", "chapterList.txt", "-acodec", "libmp3lame", "-q:a", "4", useBookName + ".mp3"], cwd = workingDirectory, capture_output=True)
-else:
-	subprocess.run(["ffmpeg", "-f", "concat", "-i", "chapterList.txt", "-acodec", "alac", useBookName + ".m4a"], cwd = workingDirectory, capture_output=True)
-	
+script_path = os.path.abspath(__file__)
+script_directory = os.path.dirname(script_path)
+
+if(platform.system() == 'Windows'):
+	ffmpeg_loc = args.ffmpeg_location
+	print(f'FFMPEG location: {ffmpeg_loc}')
+	if(args.audio == "mp3"):
+		subprocess.run([ffmpeg_loc, "-f", "concat", "-i", "chapterList.txt", "-acodec", "libmp3lame", "-q:a", "4", useBookName + ".mp3"], cwd = workingDirectory, capture_output=True)
+	else:
+		subprocess.run([ffmpeg_loc, "-f", "concat", "-i", "chapterList.txt", "-acodec", "alac", useBookName + ".m4a"], cwd = workingDirectory, capture_output=True)
+elif(platform.system() == 'Darwin' or platform.system() == 'Linux'):
+	ffmpeg_loc = args.ffmpeg_location
+	print(f'FFMPEG location: {ffmpeg_loc}')
+	if(args.audio == "mp3"):
+		subprocess.run([ffmpeg_loc, "-f", "concat", "-i", "chapterList.txt", "-acodec", "libmp3lame", "-q:a", "4", useBookName + ".mp3"], cwd = workingDirectory, capture_output=True)
+	else:
+		subprocess.run([ffmpeg_loc, "-f", "concat", "-i", "chapterList.txt", "-acodec", "alac", useBookName + ".m4a"], cwd = workingDirectory, capture_output=True)
+		
 print("done", flush=True)
 
 print("Creating file configuration", flush=True)
