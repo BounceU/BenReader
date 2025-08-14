@@ -5,7 +5,7 @@ a = Analysis(
     ['tts_epub.py'],
     pathex=[],
     binaries=[],
-    datas=[('/Users/benliebkemann/miniconda3/envs/book_ai/lib/python3.9/site-packages', '.')],
+    datas=[('C:/Users/ben/miniconda3/envs/book_ai/Lib/site-packages', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
